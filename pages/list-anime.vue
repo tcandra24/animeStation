@@ -9,7 +9,6 @@
           class="pt-5 mx-2"
         >
           <v-card
-            :color="item.color"
             dark
           >
             <div class="d-flex flex-no-wrap justify-space-between">
@@ -56,8 +55,11 @@ export default {
     }
   },
   async fetch () {
+    // https://kitsu.io/api/edge/anime?sort=-averageRating
+    // https://kitsu.io/api/edge/anime?sort=-popularityRank
+    // https://kitsu.io/api/edge/anime?filter[text]=one%20piece
     this.items = await fetch(
-      'https://kitsu.io/api/edge/anime?filter[text]=one%20piece'
+      'https://kitsu.io/api/edge/anime?sort=-popularityRank'
     ).then(res => res.json())
   }
 }

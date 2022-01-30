@@ -67,6 +67,9 @@ export default {
       rightDrawer: false,
       title: 'Anime Station'
     }
+  },
+  head: {
+    titleTemplate: '%s | Anime Station'
   }
 }
 </script>

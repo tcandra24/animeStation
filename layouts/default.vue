@@ -31,16 +31,26 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
+      <v-spacer />
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container fluid>
         <Nuxt />
       </v-container>
     </v-main>
     <v-footer
       app
+      padless
     >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+        {{ title }} &copy; {{ new Date().getFullYear() }}
+      </v-col>
     </v-footer>
   </v-app>
 </template>

@@ -2,39 +2,67 @@
   <div>
     <v-sheet
       class="mx-auto"
-      elevation="1"
+      elevation="2"
     >
       <div class="text-left text-h2 white--text font-weight-bold pa-5">
-        Average Popular
+        {{ title }}
       </div>
+      <v-divider />
       <v-slide-group
-        v-model="model"
         class="pa-4"
         center-active
         show-arrows
       >
-        <v-slide-item
-          v-for="(item, i) in items.data"
-          :key="i"
-          v-slot="{ active, toggle }"
-        >
-          <v-responsive :aspect-ratio="16/9">
+        <template v-if="items.data">
+          <v-slide-item
+            v-for="(item, i) in items.data"
+            :key="i"
+            v-slot="{ active, toggle }"
+          >
+            <v-responsive :aspect-ratio="16/9">
+              <v-card
+                :color="active ? 'primary' : 'grey lighten-1'"
+                dark
+                class="ma-4"
+                @click="toggle"
+              >
+                <v-img
+                  :src="item.attributes.posterImage.small"
+                  height="350"
+                  width="210"
+                >
+                  <v-card-title
+                    class="text-subtitle-1"
+                    style="background-color: #4242429c;"
+                    v-text="Object.values(item.attributes.titles)[0]"
+                  />
+                </v-img>
+              </v-card>
+            </v-responsive>
+          </v-slide-item>
+        </template>
+        <template v-else>
+          <v-slide-item
+            v-for="n in 9"
+            :key="n"
+            v-slot="{ toggle }"
+          >
             <v-card
-              :color="active ? 'primary' : 'grey lighten-1'"
+              color="grey lighten-1"
               dark
               class="ma-4"
+              height="350"
+              width="210"
               @click="toggle"
             >
-              <v-img :src="item.attributes.posterImage.small">
-                <v-card-title
-                  class="text-h5"
-                  style="background-color: #4242429c;"
-                  v-text="item.attributes.titles.en_jp"
-                />
-              </v-img>
+              <v-row
+                class="fill-height"
+                align="center"
+                justify="center"
+              />
             </v-card>
-          </v-responsive>
-        </v-slide-item>
+          </v-slide-item>
+        </template>
       </v-slide-group>
     </v-sheet>
   </div>
@@ -45,7 +73,11 @@ export default {
   name: '',
   props: {
     items: {
-      type: Array,
+      type: [Object, Array],
+      required: true
+    },
+    title: {
+      type: String,
       required: true
     }
   }

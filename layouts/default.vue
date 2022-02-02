@@ -30,7 +30,11 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <nuxt-link to="/" class="text-h5 white--text font-weight-bold text-decoration-none ml-5">
+        <v-toolbar-title>
+          {{ title }}
+        </v-toolbar-title>
+      </nuxt-link>
       <v-spacer />
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>

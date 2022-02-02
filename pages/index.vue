@@ -1,85 +1,101 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
+  <div>
+    <v-row
+      dense
+      class="mb-2"
+    >
+      <v-col>
+        <v-sheet
+          class="mx-auto"
+        >
+          <v-slide-group
+            show-arrows
           >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+            <v-slide-item
+              v-for="(category, index) in categories.data"
+              :key="index"
+              v-slot="{ active, toggle }"
+            >
+              <v-btn
+                class="mx-2"
+                :input-value="active"
+                depressed
+                rounded
+                @click="toggle"
+              >
+                {{ category.attributes.title }}
+              </v-btn>
+            </v-slide-item>
+          </v-slide-group>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row dense>
+      <v-img
+        class="mb-5"
+        height="70vh"
+        :aspect-ratio="16/9"
+        src="https://images8.alphacoders.com/108/1081458.jpg"
+      >
+        <v-row>
+          <v-col cols="6">
+            <div class="text-left pa-5">
+              <p class="text-h2 white--text font-weight-bold">
+                Attack On Titans
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+      </v-img>
+    </v-row>
+    <v-row
+      dense
+      class="my-5"
+    >
+      <v-col>
+        <SlideGroup :items="avg_rating" title="Average Popular" />
+      </v-col>
+    </v-row>
+    <v-row
+      dense
+      class="my-5"
+    >
+      <v-col>
+        <SlideGroup :items="popular" title="Popular Now" />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      avg_rating: [],
+      popular: [],
+      categories: []
+    }
+  },
+  async fetch () {
+    // https://kitsu.io/api/edge/anime?sort=-averageRating
+    // https://kitsu.io/api/edge/anime?sort=-popularityRank
+    // https://kitsu.io/api/edge/anime?filter[text]=one%20piece
+    // https://kitsu.io/api/edge/anime/40591/categories
+    // https://kitsu.io/api/edge/categories limit 10
+    this.avg_rating = await fetch(
+      'https://kitsu.io/api/edge/anime?sort=-averageRating'
+    ).then(res => res.json())
+
+    this.popular = await fetch(
+      'https://kitsu.io/api/edge/anime?sort=-popularityRank'
+    ).then(res => res.json())
+
+    this.categories = await fetch(
+      'https://kitsu.io/api/edge/categories?page[limit]=20'
+    ).then(res => res.json())
+  },
   head: {
-    title: 'Home page'
+    title: 'List anime'
   }
 }
 </script>

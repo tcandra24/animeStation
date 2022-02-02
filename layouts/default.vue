@@ -60,17 +60,11 @@ export default {
   data () {
     return {
       drawer: false,
-      fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
           icon: 'mdi-bookmark-box-multiple',
-          title: 'List Anime',
-          to: '/list-anime'
+          title: 'Home',
+          to: '/'
         }
       ],
       right: true,

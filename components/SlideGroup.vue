@@ -17,14 +17,15 @@
           <v-slide-item
             v-for="(item, i) in items.data"
             :key="i"
-            v-slot="{ active, toggle }"
+            v-slot="{ active }"
           >
             <v-responsive :aspect-ratio="16/9">
               <v-card
                 :color="active ? 'primary' : 'grey lighten-1'"
                 dark
                 class="ma-4"
-                @click="toggle"
+                nuxt
+                :to="`detail/${item.id}`"
               >
                 <v-img
                   :src="item.attributes.posterImage.small"

@@ -36,7 +36,7 @@
         </v-toolbar-title>
       </nuxt-link>
       <v-spacer />
-      <v-btn icon>
+      <v-btn icon @click="dialog = true">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </v-app-bar>
@@ -44,6 +44,39 @@
       <v-container fluid>
         <Nuxt />
       </v-container>
+      <keep-alive>
+        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+          <v-card>
+            <v-toolbar>
+              <v-btn icon dark @click.stop="dialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-col
+                cols="12"
+                lg="6"
+                md="6"
+                class="mx-auto"
+              >
+                <v-text-field
+                  v-model="search"
+                  hide-details
+                  append-icon="mdi-arrow-right"
+                  outlined
+                  autofocus
+                  dense
+                  clearable
+                  label="Search"
+                  prepend-inner-icon="mdi-magnify"
+                  class="mr-5"
+                  color="grey lighten-2"
+                  @click:append="doSearch()"
+                  @keyup.enter.native="doSearch()"
+                />
+              </v-col>
+            </v-toolbar>
+          </v-card>
+        </v-dialog>
+      </keep-alive>
     </v-main>
     <v-footer
       app
@@ -64,6 +97,8 @@ export default {
   data () {
     return {
       drawer: false,
+      dialog: false,
+      search: '',
       items: [
         {
           icon: 'mdi-bookmark-box-multiple',
@@ -78,6 +113,11 @@ export default {
   },
   head: {
     titleTemplate: '%s | Anime Station'
+  },
+  methods: {
+    doSearch () {
+      alert(this.search)
+    }
   }
 }
 </script>

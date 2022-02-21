@@ -74,6 +74,50 @@
                 />
               </v-col>
             </v-toolbar>
+            <v-card-text>
+              <v-subheader>
+                Result search berhasil
+              </v-subheader>
+              <v-container
+                class="ma-0 pa-0"
+                fluid
+                grid-list-sm
+              >
+                <v-row
+                  dense
+                  class="my-3"
+                >
+                  <v-col
+                    v-for="(result, i) in results.data"
+                    :key="i"
+                  >
+                    <v-responsive :aspect-ratio="16/9">
+                      <v-card
+                        color="primary"
+                        width="210"
+                        height="350"
+                        dark
+                        class="ma-4"
+                        nuxt
+                        :to="`detail/${result.id}`"
+                      >
+                        <v-img
+                          :src="result.attributes.posterImage.small"
+                          height="350"
+                          width="210"
+                        >
+                          <v-card-title
+                            class="text-subtitle-1"
+                            style="background-color: #4242429c;"
+                            v-text="Object.values(result.attributes.titles)[0]"
+                          />
+                        </v-img>
+                      </v-card>
+                    </v-responsive>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
           </v-card>
         </v-dialog>
       </keep-alive>
@@ -99,6 +143,7 @@ export default {
       drawer: false,
       dialog: false,
       search: '',
+      results: [],
       items: [
         {
           icon: 'mdi-bookmark-box-multiple',
@@ -115,8 +160,10 @@ export default {
     titleTemplate: '%s | Anime Station'
   },
   methods: {
-    doSearch () {
-      alert(this.search)
+    async doSearch () {
+      this.results = await fetch(
+        `https://kitsu.io/api/edge/anime?filter[text]=${this.search}`
+      ).then(res => res.json())
     }
   }
 }

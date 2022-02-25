@@ -25,6 +25,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
+      v-if="isHome"
       :clipped-left="true"
       fixed
       app
@@ -36,19 +37,34 @@
         </v-toolbar-title>
       </nuxt-link>
       <v-spacer />
-      <v-btn icon @click="dialog = true">
+      <v-btn icon @click="changeSearchBarStatus(true)">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
+    </v-app-bar>
+    <v-app-bar
+      v-else
+      :clipped-left="true"
+      fixed
+      app
+    >
+      <v-btn icon @click.stop="$router.push({ path: '/' })">
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+      <nuxt-link to="/" class="text-h5 white--text font-weight-bold text-decoration-none ml-5">
+        <v-toolbar-title>
+          {{ title }}
+        </v-toolbar-title>
+      </nuxt-link>
     </v-app-bar>
     <v-main>
       <v-container fluid>
         <Nuxt />
       </v-container>
       <keep-alive>
-        <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+        <v-dialog v-model="getSearchBarStatus" fullscreen hide-overlay transition="dialog-bottom-transition">
           <v-card>
             <v-toolbar>
-              <v-btn icon dark @click.stop="dialog = false">
+              <v-btn icon dark @click.stop="changeSearchBarStatus(false)">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
               <v-col
@@ -99,7 +115,7 @@
                         dark
                         class="ma-4"
                         nuxt
-                        :to="`detail/${result.id}`"
+                        :to="`/detail/${result.id}`"
                       >
                         <v-img
                           :src="result.attributes.posterImage.small"
@@ -137,11 +153,11 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   data () {
     return {
       drawer: false,
-      dialog: false,
       search: '',
       results: [],
       items: [
@@ -159,12 +175,23 @@ export default {
   head: {
     titleTemplate: '%s | Anime Station'
   },
+  computed: {
+    ...mapGetters([
+      'getSearchBarStatus'
+    ]),
+    isHome () {
+      return (this.$route.path === '/')
+    }
+  },
   methods: {
     async doSearch () {
       this.results = await fetch(
         `https://kitsu.io/api/edge/anime?filter[text]=${this.search}`
       ).then(res => res.json())
-    }
+    },
+    ...mapMutations([
+      'changeSearchBarStatus'
+    ])
   }
 }
 </script>

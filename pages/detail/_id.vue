@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -80,7 +81,20 @@ export default {
   computed: {
     id () {
       return this.$route.params.id
+    },
+    ...mapGetters([
+      'getSearchBarStatus'
+    ])
+  },
+  created () {
+    if (this.getSearchBarStatus) {
+      this.changeSearchBarStatus(false)
     }
+  },
+  methods: {
+    ...mapMutations([
+      'changeSearchBarStatus'
+    ])
   }
 }
 </script>
